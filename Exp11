@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <conio.h>
+
+#define MAX 100
+
+char stack[MAX];
+int top = -1;
+
+void push(char c) {
+    // Push a character onto the stack
+    if (top == MAX - 1) {
+        printf("Stack Overflow\n");
+    } else {
+        stack[++top] = c;
+    }
+}
+
+char pop() {
+    // Pop a character from the stack
+    if (top == -1) {
+        return -1;
+    } else {
+        return stack[top--];
+    }
+}
+
+int precedence(char c) {
+    // Return the precedence of the operator
+    if (c == '+' || c == '-') return 1;
+    if (c == '*' || c == '/') return 2;
+    return 0;
+}
+
+void infixToPostfix(char *infix, char *postfix) {
+    // Convert infix to postfix using a stack
+    int j = 0;
+    for (int i = 0; i < strlen(infix); i++) {
+        char c = infix[i];
+        if (isalnum(c)) {
+            postfix[j++] = c;
+        } else if (c == '(') {
+            push(c);
+        } else if (c == ')') {
+            while (stack[top] != '(') {
+                postfix[j++] = pop();
+            }
+            pop(); // remove '('
+        } else {
+            while (top != -1 && precedence(stack[top]) >= precedence(c)) {
+                postfix[j++] = pop();
+            }
+            push(c);
+        }
+    }
+    while (top != -1) {
+        postfix[j++] = pop();
+    }
+    postfix[j] = '\0';
+}
+
+int main() {
+    clrscr();
+    char infix[100], postfix[100];
+
+    printf("Enter infix expression: ");
+    scanf("%s", infix);
+
+    infixToPostfix(infix, postfix);
+
+    printf("Postfix expression: %s\n", postfix);
+
+    getch();
+    return 0;
+}
