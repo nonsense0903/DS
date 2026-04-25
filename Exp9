@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node {
+int data;
+struct node *left, *right;
+};
+struct node* insert(struct node *root, int val) {
+// Insert a node into the BST
+if (root == NULL) {
+root = (struct node*)malloc(sizeof(struct node));
+root->data = val;
+root->left = root->right = NULL;
+} else if (val < root->data) root->left = insert(root->left, val); else root->right = insert(root->right, val);
+return root;
+}
+void inorder(struct node *root) {
+// Inorder traversal (left-root-right)
+if (root != NULL) {
+inorder(root->left); 
+printf("%d ", root->data);
+inorder(root->right);
+}
+}
+void preorder(struct node *root) {
+// Preorder traversal (root-left-right)
+if (root != NULL) {
+printf("%d ", root->data);
+preorder(root->left);
+preorder(root->right);
+}
+}
+void postorder(struct node *root) {
+// Postorder traversal (left-right-root)
+if (root != NULL) {
+postorder(root->left);
+postorder(root->right);
+printf("%d ", root->data);
+}
+}
+int main() {
+struct node *root = NULL;
+int choice, val;
+while (1) { printf("1. Insert 2. Inorder 3. Preorder 4. Postorder 5. Exit: ");
+scanf("%d", &choice);
+if (choice == 1) {
+printf("Enter value: ");
+scanf("%d", &val);
+root = insert(root, val);
+} else if (choice == 2) {
+printf("Inorder traversal: ");
+inorder(root); 
+printf("\n");
+} else if (choice == 3) {
+printf("Preorder traversal: ");
+preorder(root);
+printf("\n");
+} else if (choice == 4) {
+printf("Postorder traversal: ");
+postorder(root);
+printf("\n");
+} else break;
+}
+return 0; } 
+
