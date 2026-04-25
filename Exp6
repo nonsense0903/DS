@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *next;
+};
+
+struct node *head = NULL;
+
+void insert(int val) {
+    // Create a new node and insert at the beginning
+    struct node *newnode = (struct node*)malloc(sizeof(struct node));
+    newnode->data = val;
+    newnode->next = head;
+    head = newnode;
+}
+
+void delete(int val) {
+    // Delete the node with the given value
+    struct node *temp = head, *prev;
+
+    if (temp != NULL && temp->data == val) {
+        head = temp->next;
+        free(temp);
+        return;
+    }
+
+    while (temp != NULL && temp->data != val) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Value not found in the list\n");
+        return;
+    }
+
+    prev->next = temp->next;
+    free(temp);
+}
+
+void display() {
+    // Traverse and display the linked list
+    struct node *temp = head;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    insert(10);
+    insert(20);
+    insert(30);
+
+    printf("List: ");
+    display(); // Output: 30 20 10
+
+    delete(20);
+
+    printf("List after deletion: ");
+    display(); // Output: 30 10
+
+    return 0;
+}
